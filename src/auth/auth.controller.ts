@@ -20,7 +20,12 @@ export class AuthController {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { email: user.email, id: user._id };
+    const payload = {
+      email: user.email,
+      id: user._id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+    };
 
     const token = await this.authService.login(payload);
 
@@ -51,7 +56,12 @@ export class AuthController {
       password,
     });
 
-    const payload = { email: newUser.email, id: newUser._id };
+    const payload = {
+      email: newUser.email,
+      id: newUser._id,
+      firstname: newUser.firstname,
+      lastname: newUser.lastname,
+    };
     const token = this.authService.login(payload);
 
     return token;

@@ -28,7 +28,7 @@ export class MessagesController {
     @Req() req: AuthorizedRequest,
     @Body() createMessageDto: CreateMessageDto,
   ) {
-    const { chatId, sender, text } = createMessageDto;
+    const { chatId, text } = createMessageDto;
 
     const chat = await this.chatsService.findOne(chatId);
 
@@ -40,7 +40,7 @@ export class MessagesController {
       throw new Error('Unauthorized access');
     }
 
-    await this.messagesService.create(createMessageDto);
+    await this.messagesService.create({ chatId, text, sender: req.user.id });
 
     const response = await this.openAIService.generateCompletion(text);
 
