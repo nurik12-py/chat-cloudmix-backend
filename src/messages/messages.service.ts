@@ -4,7 +4,6 @@ import { UpdateMessageDto } from './dto/update-message.dto';
 import { MessageDocument } from './message.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { ChatsService } from 'src/chats/chats.service';
 
 @Injectable()
 export class MessagesService {
@@ -16,8 +15,14 @@ export class MessagesService {
     return this.messageModel.create(createMessageDto);
   }
 
-  findAllByChatId(chatId: string) {
-    return this.messageModel.find({ chatId }).exec();
+  findAllByChatId(chatId: string, limit: number, offset: number) {
+    return this.messageModel
+      .find({ chatId })
+      .sort('-date')
+      .limit(limit)
+      .skip(offset)
+      .exec()
+      .then((messages) => messages.reverse());
   }
 
   findOne(id: string) {

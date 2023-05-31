@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type ChatDocument = Chat & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Chat {
   @Prop({ required: true })
   userId: string;
@@ -13,6 +13,12 @@ export class Chat {
 
   @Prop()
   messages: any[];
+
+  @Prop()
+  createdAt?: Date;
+
+  @Prop()
+  updatedAt?: Date;
 }
 
 export const ChatSchema = SchemaFactory.createForClass(Chat);

@@ -4,7 +4,7 @@ import { IsEmail } from 'class-validator';
 
 export type UserDocument = User & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class User {
   @Prop({ unique: true, required: true })
   @IsEmail()
@@ -18,6 +18,12 @@ export class User {
 
   @Prop()
   lastname: string;
+
+  @Prop()
+  createdAt?: Date;
+
+  @Prop()
+  updatedAt?: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
