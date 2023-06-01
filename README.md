@@ -1,3 +1,7 @@
+## Demo
+
+Link to deployed app in heroku: [chat-cloudmix.herokuapp.co](https://chat-cloudmix.herokuapp.co)
+
 ## Setup Instructions
 
 1. Navigate to the project root directory
