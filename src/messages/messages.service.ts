@@ -36,4 +36,8 @@ export class MessagesService {
   remove(id: string) {
     return this.messageModel.deleteOne({ _id: id }).exec();
   }
+
+  removeAllByChatId(chatId: string) {
+    return this.messageModel.deleteMany({ chatId }).exec();
+  }
 }

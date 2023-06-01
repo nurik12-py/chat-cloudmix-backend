@@ -32,22 +32,22 @@ export class ChatsController {
   ) {}
 
   @Post()
-  createChat(@Req() req: AuthorizedRequest) {
+  async createChat(@Req() req: AuthorizedRequest) {
     const decodedToken = req.user;
     const randomName = uniqueNamesGenerator({
       dictionaries: [adjectives, names],
       separator: ' ',
       style: 'capital',
     });
-    return this.chatsService.create({
+    return await this.chatsService.create({
       botName: randomName,
       userId: decodedToken.id,
     });
   }
 
   @Get()
-  findAllChats(@Req() req: AuthorizedRequest) {
-    return this.chatsService.findAll(req.user.id);
+  async findAllChats(@Req() req: AuthorizedRequest) {
+    return await this.chatsService.findAll(req.user.id);
   }
 
   @Get(':id')
@@ -58,7 +58,7 @@ export class ChatsController {
       throw new UnauthorizedException('Unauthorized access');
     }
 
-    return this.chatsService.findOne(id);
+    return await this.chatsService.findOne(id);
   }
 
   @Patch(':id')
@@ -73,7 +73,7 @@ export class ChatsController {
       throw new UnauthorizedException('Unauthorized access');
     }
 
-    return this.chatsService.update(id, updateChatDto);
+    return await this.chatsService.update(id, updateChatDto);
   }
 
   @Delete(':id')
@@ -84,7 +84,8 @@ export class ChatsController {
       throw new UnauthorizedException('Unauthorized access');
     }
 
-    return this.chatsService.remove(id);
+    await this.messagesService.removeAllByChatId(id);
+    return await this.chatsService.remove(id);
   }
 
   @Post(':chatId/messages')
@@ -119,24 +120,24 @@ export class ChatsController {
   }
 
   @Get(':chatId/messages')
-  findAllMessages(
+  async findAllMessages(
     @Param('chatId') chatId: string,
     @Query('limit') limit = 25,
     @Query('offset') offset = 0,
   ) {
-    return this.messagesService.findAllByChatId(chatId, limit, offset);
+    return await this.messagesService.findAllByChatId(chatId, limit, offset);
   }
 
   @Patch(':chatId/messages')
-  updateMessage(
+  async updateMessage(
     @Param('chatId') id: string,
     @Body() updateMessageDto: UpdateMessageDto,
   ) {
-    return this.messagesService.update(id, updateMessageDto);
+    return await this.messagesService.update(id, updateMessageDto);
   }
 
   @Delete(':chatsId/messages')
-  removeMessage(@Param('chatId') id: string) {
-    return this.messagesService.remove(id);
+  async removeMessage(@Param('chatId') id: string) {
+    return await this.messagesService.remove(id);
   }
 }
